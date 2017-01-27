@@ -12,6 +12,8 @@ WeightedForm::usage="WeightedForm[M], changes zeros in matrix M to infinity"
 WeightedFormDot::usage="WeightedFormDot[M], changes zeros followed by dots in matrix M to infinity"
 UnweightedForm::usage="UnweightedForm[M], changes Inifinity in matrix M to zeros"
 MakeUnified::usage="MakeUnified[M], changes all values in matrix M to 1, if they are not 0. DEPRECATED, USE unitize"
+PeriodicQ::usage="PeriodicQ[M] tests graph described by adjacency matrix M for periodicity and outputs the transfer time"
+PSTQ::usage="PSTQ[M,t] returns permutation matrix if there is PST on graph described by M after transfer time t. Outputs matrix plot for better readability, grey is -1, green is 1, blue is -i"
 
 ApproxMatrixExp::usage="ApproxMatrixExp[A, N], calculates MatrixExp[A] as a sum up to Nth power"
 ApproxNumMatrixExp::usage="ApproxNumMatrixExp[A, NN, p], calculates MatrixExp[A] numerically with precision p up to NNth power"
@@ -47,6 +49,8 @@ WeightedForm[M_]:=M /. 0->Infinity;
 WeightedFormDot[M_]:=M /. 0.->Infinity;
 UnweightedForm[M_]:=M/. Infinity->0;
 MakeUnified[M_]:=M/. !0->1;
+PeriodicQ[M_]:=Solve[MatrixExp[-I M t]==IdentityMatrix[Dimensions[M][[1]]],t]
+PSTQ[M_,t_]:=MatrixPlot[MatrixExp[-I M t],LabelStyle->Large,ColorRules->{1->RGBColor["#649600"],-1->RGBColor["#7b7c7e"]}]
 
 ApproxMatrixExp[A_,N_]:=(Result=IdentityMatrix[Dimensions[A]];Do[Result+=MatrixPower[-1 A,n]/Factorial[n],{n,1,N}];Return[Result]);
 ApproxNumMatrixExp[A_,NN_,p_]:=(Result=IdentityMatrix[Dimensions[A]];Do[Result+=MatrixPower[N[-A,p],n]/Factorial[n],{n,1,NN}];Return[Result]);
